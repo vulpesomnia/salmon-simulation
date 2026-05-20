@@ -1,0 +1,9 @@
+[package]
+name = "malli"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+ggca = "1.0.0"
+ndarray = "0.17.2"
+plotters = "0.3.7"
