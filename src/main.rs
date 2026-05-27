@@ -47,24 +47,24 @@ fn main() {
         0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
     ];*/
 
-    for b in 1..100 {
-        println!("{:?}%", (b as f64) / 100.0 * 100.0);
+    for b in 0..1 {
     for c in 1..2 {
-    for a in 1..2 {
-        for pj in 1..100 {
-            for pl in 1..100 {
-                if pl as f64 / 100.0 + b as f64 / 100.0 >= 1.0 {
+    for a in 1..100 {
+        println!("{:?}%", (a as f64) / 100.0 * 100.0);
+        for pj in 1..10 {
+            for pl in 1..10 {
+               /* if pl as f64 / 10.0 + b as f64 / 100.0 >= 1.0 {
                     continue;
-                }
-                for spawning in 0..1 {
+                }*/
+                for spawning in 0..100 {
     // PARAMETRIT \\
 
-    let alpha: f64 = 0.0;//a as f64 / 1000.0;
-    let beta: f64 = b as f64 / 100.0;
-    let p_j: f64 = pj as f64 / 100.0; // Merellejääntitodennäköisyys
-    let p_l: f64 = pl as f64 / 100.0; // Poikasten laskeutumistodennäköisyys
-    let spwn: f64 = 900.0;//spawning as f64 * 10.0; // Kutumäärä naaraslohille
-    
+    let alpha: f64 = a as f64 / 100.0;
+    let beta: f64 = 0.0;//b as f64 / 10.0;
+    let p_j: f64 = pj as f64 / 10.0; // Merellejääntitodennäköisyys
+    let p_l: f64 = pl as f64 / 10.0; // Poikasten laskeutumistodennäköisyys
+    let spwn: f64 = spawning as f64 * 15.0; // Kutumäärä naaraslohille
+    //spwn = 900
 
    /* let alpha: f64 = 0.009;
     let beta: f64 = 0.0;
@@ -83,7 +83,7 @@ fn main() {
     let seal_weight_sea = 0.2;
     let seal_weight_river = 0.8;
     // LESLIE-MALLI \\
-    let leslie_matrix = arr2(&[
+    let leslie_matrix_male = arr2(&[
         //FROM: P1, P2, P3, P4, P5; M1, J1; M2, J2; M3, J3; M4+, J4+;
         [
             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, spwn, 0.0, spwn, 0.0, spwn, 0.0, spwn,
@@ -145,7 +145,7 @@ fn main() {
             0.0,
             0.0,
             0.0,
-            1.0 - p_j - beta,
+            0.65 - beta,
             0.0,
             0.0,
             0.0,
@@ -155,7 +155,7 @@ fn main() {
             0.0,
         ], // J1
         [
-            0.0, 0.0, 0.0, 0.0, 0.0, p_j, sps, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.35, sps, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
         ], // M2
         [
             0.0,
@@ -209,20 +209,147 @@ fn main() {
             0.0,
         ], // J4+
     ]);
-    let pop_length: usize = leslie_matrix.nrows();
+    let leslie_matrix_female = arr2(&[
+        //FROM: P1, P2, P3, P4, P5; M1, J1; M2, J2; M3, J3; M4+, J4+;
+        [
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, spwn, 0.0, spwn, 0.0, spwn, 0.0, spwn,
+        ], // TO: P1
+        [
+            1.0 - p_l,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ], // P2
+        [
+            0.0,
+            1.0 - p_l,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ], // P3
+        [
+            0.0,
+            0.0,
+            1.0 - p_l,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ], // P4
+        [
+            p_l, p_l, p_l, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        ], // P5
+        [
+            0.0, 0.0, 0.0, 0.0, fs, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        ], // M1
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.1 - beta,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ], // J1
+        [
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.9, sps, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+        ], // M2
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.8 -  beta,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+        ], // J2
+        [
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2, sps, 0.0, 0.0, 0.0, 0.0,
+        ], // M3
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0 - p_j - beta,
+            0.0,
+            0.0,
+            0.0,
+        ], // J3
+        [
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, p_j, sps, p_j, sps,
+        ], // M4+
+        [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            1.0 - p_j - beta,
+            0.0,
+        ], // J4+
+    ]);
+    let pop_length: usize = leslie_matrix_male.nrows();
     let sea_indices = vec![5, 7, 9, 11];
     let river_indices = vec![6, 8, 10, 12];
-    let start_population: Array2<f64> = calc_start(1.0, 100, &leslie_matrix);
-    let total_river_ratio: f64 = river_indices
-        .iter()
-        .map(|&i| start_population[[i, 0]])
-        .sum::<f64>();
-    let scale = measured_salmon_run[0] as f64 / (total_river_ratio);
-    let mut start_population = &start_population * scale;
-    let mut salmon_amounts = Vec::new(); // 0 = Naaras, 1 = Uros
+    let mut start_population: Vec<Array2<f64>> = calc_start(1.0, 100, &leslie_matrix_male, &leslie_matrix_female, spwn);
+   // println!("salmonstart: {:?}", start_population);
     for gender in 0..2 {
-        salmon_amounts.push(start_population.clone() / 2.0);
+        let total_river_ratio: f64 = river_indices
+            .iter()
+            .map(|&i| start_population[gender][[i, 0]])
+            .sum::<f64>();
+        let scale = measured_salmon_run[0] as f64 / (total_river_ratio);
+        start_population[gender] *= scale / 2.0;
     }
+    let mut salmon_amounts = start_population; // 0 = Naaras, 2 = Uros
+    //println!("salmon: {:?}", salmon_amounts);
     let simulation_years: usize = measured_salmon_run.len();
     let mut calculated_salmon_run: Vec<f64> = vec![0.0; simulation_years];
     for i in 0..simulation_years {
@@ -319,14 +446,14 @@ fn main() {
         // Laske seuraava Leslie-mallin askel:
         // Samalla jaetaan kutu naaraiden ja urosten kesken.
         // NAARAS
-        let mut female_matrix = leslie_matrix.clone();
+        let mut female_matrix = leslie_matrix_female.clone();
         for j in &river_indices {
             female_matrix[[0, *j]] = spwn * 0.5;
         }
             salmon_amounts[0] = female_matrix
                 .dot(&(&salmon_amounts[0] - &fishing_female - alpha * &seal_mortality_female * vpow(&salmon_amounts[0], c as f64 / 10.0))); 
         // UROS
-        let mut male_matrix = leslie_matrix.clone();
+        let mut male_matrix = leslie_matrix_male.clone();
         for j in &river_indices {
             male_matrix[[0, *j]] = 0.0;
         }
@@ -382,6 +509,7 @@ fn main() {
         println!("best_pj: {:?}", best_pj);
         println!("best_spawning: {:?}", best_spawning);
         println!("best_power: {:?}", best_c);
+    println!("Best calculated salmon run: {:?}", &best_calculated_salmon_run);
     draw::plot_salmon_runs(
         measured_salmon_run,
         best_calculated_salmon_run,
@@ -392,10 +520,16 @@ fn main() {
 }
 // Neliövirhe
 fn mse(measured: &Vec<f64>, calculated: &Vec<f64>) -> f64 {
+    let important_years: Vec<usize> = vec![2021, 2014, 2016];
     let mut sum: f64 = 0.0;
     let n: usize = measured.len();
     for i in 0..n {
-        sum += (measured[i] - calculated[i]) * (measured[i] - calculated[i]);
+        let year = 2009 + i;
+        if important_years.contains(&year) {
+            sum += (measured[i] - calculated[i]) * (measured[i] - calculated[i]) * 10.0;
+        } else {
+            sum += (measured[i] - calculated[i]) * (measured[i] - calculated[i]);
+        }
     }
     return sum / (n as f64);
 }
@@ -414,17 +548,44 @@ fn r2(measured: &Vec<f64>, calculated: &Vec<f64>) -> f64 {
     return 1.0 - mse(measured, calculated) / var(measured);
 }
 // Laske ikävaiheluokkien jakauman
-fn calc_start(total_population: f64, years_to_run: usize, leslie: &Array2<f64>) -> Array2<f64> {
-    let mut population: Array2<f64> = Array2::ones((leslie.nrows(), 1));
-    for _ in 0..years_to_run {
-        population = leslie.dot(&population);
+fn calc_start(total_population: f64, years_to_run: usize, leslie_male: &Array2<f64>, leslie_female: &Array2<f64>, spwn: f64) -> Vec<Array2<f64>> {
+    let mut population: Array2<f64> = Array2::ones((leslie_male.nrows(), 1));
+    let mut salmon_amounts = Vec::new(); // 0 = Naaras, 1 = Uros
+
+    let river_indices = vec![6, 8, 10, 12];
+    for _ in 0..2 {
+        salmon_amounts.push(population.clone());
     }
-    let total: f64 = (0..leslie.nrows()).map(|k| population[[k, 0]]).sum::<f64>();
-    let normalized: Vec<f64> = population
+    for _ in 0..years_to_run {
+        let mut female_matrix = leslie_female.clone();
+        for j in &river_indices {
+            female_matrix[[0, *j]] = spwn * 0.5;
+        }
+        salmon_amounts[0] = female_matrix.dot(&salmon_amounts[0]);
+        // UROS
+        let mut male_matrix = leslie_male.clone();
+        for j in &river_indices {
+            male_matrix[[0, *j]] = 0.0;
+        }
+        salmon_amounts[1] = male_matrix.dot(&salmon_amounts[1]);
+        salmon_amounts[1][[0, 0]] = salmon_amounts[0][[0, 0]];
+    }
+
+    //ONGELMIA TÄMÄN JÄLKEEN EHKÄ?
+    let total_male: f64 = (0..leslie_male.nrows()).map(|k| salmon_amounts[1][[k, 0]]).sum::<f64>();
+    let total_female: f64 = (0..leslie_female.nrows()).map(|k| salmon_amounts[0][[k, 0]]).sum::<f64>();
+    let normalized_male: Vec<f64> = salmon_amounts[1]
         .iter()
-        .map(|&x| x * total_population as f64 / total)
+        .map(|&x| x * total_population as f64 / total_male)
         .collect();
-    return Array2::from_shape_vec((leslie.nrows(), 1), normalized).unwrap();
+    let normalized_female: Vec<f64> = salmon_amounts[0]
+        .iter()
+        .map(|&x| x * total_population as f64 / total_female)
+        .collect();
+    return vec![
+        Array2::from_shape_vec((leslie_female.nrows(), 1), normalized_female).unwrap(),
+        Array2::from_shape_vec((leslie_male.nrows(), 1), normalized_male).unwrap(),
+    ];
 }
 // Jaa skalaari johonkin pystyvektoriin ottaen huomiin niissä indekseissä olevat runsausvektorin lohet.
 fn distribute_value(
